@@ -22,7 +22,7 @@ let blogs = [
   {
     title: 'My Plants are Dying',
     author: 'Lucy Grand',
-    subject: 'outdoors',
+    subject: 'order',
     article:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis labore vel officiis magnam, molestiae aspernatur quasi culpa iure alias quod atque sequi repellat corrupti cupiditate nulla autem? Delectus, sequi placeat.',
 
@@ -48,8 +48,17 @@ let blogs = [
   }
 ];
 
+// function searchIt(term) {
+//   return function (item) {
+//     return item.subject.toLowerCase().includes(term.toLowerCase());
+//   };
+// }
+
+let searchIt = (term) => (item) =>
+  item.subject.toLowerCase().includes(term.toLowerCase());
+
 class Blogs extends Component {
-  state = { blogs:blogs, name: 'Wilson' };
+  state = { blogs, searchTerm: '' };
 
   onDelete = (id) => {
     const updatedBlog = this.state.blogs.filter((item) => item.objectId !== id);
@@ -58,6 +67,17 @@ class Blogs extends Component {
       blogs: updatedBlog
     });
     console.log(`Delete ${id}`);
+  };
+
+  handleChange = (event) => {
+    this.setState(
+      {
+        searchTerm: event.target.value
+      },
+      () => {
+        console.log(this.state.searchTerm);
+      }
+    );
   };
 
   render() {
@@ -71,37 +91,49 @@ class Blogs extends Component {
           flexDirection: 'column'
         }}
       >
-        {this.state.blogs.map((blog, idx) => {
-          const { objectId, title, author, subject, article } = blog;
-          return (
-            <div
-              key={objectId}
-              className='ui card'
-              style={{ width: '75%', padding: '20px' }}
-            >
-              <div className='content'>
-                <div className='header'>{title}</div>
-                <br />
-                <div className='meta'>Author: {author}</div>
-                <br />
-                <div className='meta'>Subject: {subject}</div>
-                <hr />
-                <div className='description'>{article}</div>
+        <form className='ui form'>
+          <div className='field'>
+            <input
+              type='text'
+              placeholder='Search by subject...'
+              onChange={this.handleChange}
+            />
+          </div>
+        </form>
+
+        {this.state.blogs
+          .filter(searchIt(this.state.searchTerm))
+          .map((blog, idx) => {
+            const { objectId, title, author, subject, article } = blog;
+            return (
+              <div
+                key={objectId}
+                className='ui card'
+                style={{ width: '75%', padding: '20px' }}
+              >
+                <div className='content'>
+                  <div className='header'>{title}</div>
+                  <br />
+                  <div className='meta'>Author: {author}</div>
+                  <br />
+                  <div className='meta'>Subject: {subject}</div>
+                  <hr />
+                  <div className='description'>{article}</div>
+                </div>
+                <div>
+                  <button
+                    className='ui primary button'
+                    style={{ margin: '10px 15px' }}
+                    onClick={() => {
+                      this.onDelete(blog.objectId);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-              <div>
-                <button
-                  className='ui primary button'
-                  style={{ margin: '10px 15px' }}
-                  onClick={() => {
-                    this.onDelete(blog.objectId);
-                  }}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     );
   }

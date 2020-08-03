@@ -1,5 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Binder from './components/Binder';
+import Form from './components/Form';
 
-ReactDOM.render(<Binder />, document.getElementById('root'));
+ReactDOM.render(<Form />, document.getElementById('root'));
