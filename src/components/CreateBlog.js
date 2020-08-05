@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Form extends Component {
+class CreateBlog extends Component {
   constructor() {
     super();
     this.state = {
@@ -10,8 +10,7 @@ class Form extends Component {
         subject: '',
         article: '',
         objectId: Date.now()
-      },
-      blogs: []
+      }
     };
   }
 
@@ -19,14 +18,9 @@ class Form extends Component {
     let updatedBlog = { ...this.state.blog };
     updatedBlog[event.target.name] = event.target.value;
 
-    this.setState(
-      {
-        blog: updatedBlog
-      },
-      () => {
-        console.log(this.state.blog);
-      }
-    );
+    this.setState({
+      blog: updatedBlog
+    });
   };
 
   handleSubmit = (event) => {
@@ -38,23 +32,18 @@ class Form extends Component {
       subject: '',
       objectId: Date.now()
     };
-    let blogState = [...this.state.blogs];
-    blogState.unshift(this.state.blog);
+    // console.log(this.state.blog);
+    this.props.handleBlogSubmit(event, this.state.blog);
 
-    this.setState(
-      {
-        blogs: blogState,
-        blog: emptyBlog
-      },
-      () => {
-        console.log(this.state);
-      }
-    );
+    this.setState({
+      blog: emptyBlog
+    });
   };
 
   render() {
     return (
-      <div style={{ margin: '40px auto' }}>
+      <div style={{ paddingLeft: '30px', width: '100%' }}>
+        <h2>Create Blog:</h2>
         <form onSubmit={this.handleSubmit} className='ui form'>
           <div
             className='equal width fields'
@@ -120,40 +109,8 @@ class Form extends Component {
             </button>
           </div>
         </form>
-        <hr />
-        {this.state.blogs.map((blog, idx) => {
-          const { objectId, title, author, subject, article } = blog;
-          return (
-            <div
-              key={objectId}
-              className='ui card'
-              style={{ width: '75%', padding: '20px' }}
-            >
-              <div className='content'>
-                <div className='header'>{title}</div>
-                <br />
-                <div className='meta'>Author: {author}</div>
-                <br />
-                <div className='meta'>Subject: {subject}</div>
-                <hr />
-                <div className='description'>{article}</div>
-              </div>
-              <div>
-                <button
-                  className='ui primary button'
-                  style={{ margin: '10px 15px' }}
-                  onClick={() => {
-                    this.onDelete(blog.objectId);
-                  }}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          );
-        })}
       </div>
     );
   }
 }
-export default Form;
+export default CreateBlog;
