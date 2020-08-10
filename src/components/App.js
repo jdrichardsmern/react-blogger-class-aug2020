@@ -15,9 +15,6 @@ class App extends Component {
     axios.delete(`/remove/${id}`).then(() => {
       this.loadBlogs();
     });
-    this.setState({
-      toggle: true
-    });
   };
 
   onUpdate = (id) => {
@@ -67,6 +64,22 @@ class App extends Component {
     });
   };
 
+  handleUpdateBlogSubmit = (event, blog, id) => {
+    event.preventDefault();
+    const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Access-Control-Allow-Origin': '*'
+      }
+    };
+
+    axios.put(`/update/${id}`, blog, axiosConfig).then(() => {
+      this.loadBlogs();
+    });
+
+    this.setState({ toggle: true });
+  };
+
   componentDidMount() {
     // axios.get('/all').then((dbBlogs) => {
     //   this.setState({
@@ -104,7 +117,10 @@ class App extends Component {
             {this.state.toggle ? (
               <CreateBlog handleBlogSubmit={this.handleBlogSubmit} />
             ) : (
-              <UpdateBlog blog={this.state.blog} />
+              <UpdateBlog
+                blog={this.state.blog}
+                handleUpdateBlogSubmit={this.handleUpdateBlogSubmit}
+              />
             )}
           </div>
           <div style={{ width: '50%' }}>

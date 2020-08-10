@@ -30,13 +30,31 @@ class UpdateBlog extends Component {
       article: '',
       subject: ''
     };
-    // console.log(this.state.blog);
-    // this.props.handleBlogSubmit(event, this.state.blog);
+
+    this.props.handleUpdateBlogSubmit(
+      event,
+      this.state.blog,
+      this.props.blog._id
+    );
 
     this.setState({
       blog: emptyBlog
     });
   };
+
+  componentDidMount() {
+    this.setState({
+      blog: this.props.blog
+    });
+  }
+
+  componentDidUpdate(prevState) {
+    if (this.state.blog !== this.props.blog) {
+      this.setState({
+        blog: this.props.blog
+      });
+    }
+  }
 
   render() {
     return (
@@ -60,7 +78,7 @@ class UpdateBlog extends Component {
                   type='text'
                   name='author'
                   onChange={this.handleChange}
-                  defaultValue={this.props.blog.author}
+                  value={this.state.blog.author}
                 />
               </div>
             </div>
@@ -71,7 +89,7 @@ class UpdateBlog extends Component {
                   type='text'
                   name='subject'
                   onChange={this.handleChange}
-                  defaultValue={this.props.blog.subject}
+                  value={this.state.blog.subject}
                 />
               </div>
             </div>
@@ -83,7 +101,7 @@ class UpdateBlog extends Component {
                   type='text'
                   name='title'
                   onChange={this.handleChange}
-                  defaultValue={this.props.blog.title}
+                  value={this.state.blog.title}
                 />
               </div>
             </div>
@@ -96,7 +114,7 @@ class UpdateBlog extends Component {
                   cols='30'
                   rows='10'
                   onChange={this.handleChange}
-                  defaultValue={this.props.blog.article}
+                  value={this.state.blog.article}
                 ></textarea>
               </div>
             </div>
