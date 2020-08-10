@@ -1,24 +1,45 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import Header from './Header';
 import Search from './Search';
 import CreateBlog from './CreateBlog';
+import UpdateBlog from './UpdateBlog';
 import Blogs from './Blogs';
-import blogs from '../data/data';
 
 class App extends Component {
-  state = { blogs, searchTerm: '' };
+  state = { blogs: [], searchTerm: '', toggle: true, blog: {} };
 
   onDelete = (id) => {
-    const updatedBlog = this.state.blogs.filter((item) => item.objectId !== id);
+    // const updatedBlog = this.state.blogs.filter((item) => item.objectId !== id);
 
-    this.setState({
-      blogs: updatedBlog
+    axios.delete(`/remove/${id}`).then(() => {
+      this.loadBlogs();
     });
-    console.log(`Delete ${id}`);
+    this.setState({
+      toggle: true
+    });
   };
 
   onUpdate = (id) => {
-    console.log(`Update ${id}`);
+    this.loadSingleBlog(id);
+    // console.log(`Update ${id}`);
+  };
+
+  loadSingleBlog = (id) => {
+    axios.get(`http://localhost:8080/single/${id}`).then((dbBlog) => {
+      this.setState({
+        toggle: false,
+        blog: dbBlog.data
+      });
+    });
+  };
+
+  loadBlogs = () => {
+    axios.get('/all').then((dbBlogs) => {
+      this.setState({
+        blogs: dbBlogs.data
+      });
+    });
   };
 
   handleChange = (event) => {
@@ -34,17 +55,26 @@ class App extends Component {
 
   handleBlogSubmit = (event, blog) => {
     event.preventDefault();
-    let updatedBlogs = [blog, ...this.state.blogs];
-
-    this.setState(
-      {
-        blogs: updatedBlogs
-      },
-      () => {
-        console.log(this.state.blogs);
+    const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Access-Control-Allow-Origin': '*'
       }
-    );
+    };
+
+    axios.post('/create', blog, axiosConfig).then(() => {
+      this.loadBlogs();
+    });
   };
+
+  componentDidMount() {
+    // axios.get('/all').then((dbBlogs) => {
+    //   this.setState({
+    //     blogs: dbBlogs.data
+    //   });
+    // });
+    this.loadBlogs();
+  }
 
   render() {
     return (
@@ -71,7 +101,11 @@ class App extends Component {
                 margin: '50px auto 20px auto'
               }}
             />
-            <CreateBlog handleBlogSubmit={this.handleBlogSubmit} />
+            {this.state.toggle ? (
+              <CreateBlog handleBlogSubmit={this.handleBlogSubmit} />
+            ) : (
+              <UpdateBlog blog={this.state.blog} />
+            )}
           </div>
           <div style={{ width: '50%' }}>
             <Blogs

@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './Button';
 
 const BlogItem = (props) => {
-  const { title, author, subject, article, objectId } = props.blog;
+  const { title, author, subject, article, _id: id } = props.blog;
   return (
     <div className='ui card' style={{ width: '75%', padding: '20px' }}>
       <div className='content'>
@@ -18,14 +18,14 @@ const BlogItem = (props) => {
         <Button
           className='ui primary button'
           onClick={() => {
-            props.onDelete(objectId);
+            props.onDelete(id);
           }}
           value='Delete'
         />
         <Button
           className='ui green button'
           onClick={() => {
-            props.onUpdate(objectId);
+            props.onUpdate(id);
           }}
           value='Update'
         />

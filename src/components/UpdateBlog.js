@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class CreateBlog extends Component {
+class UpdateBlog extends Component {
   constructor() {
     super();
     this.state = {
@@ -31,7 +31,7 @@ class CreateBlog extends Component {
       subject: ''
     };
     // console.log(this.state.blog);
-    this.props.handleBlogSubmit(event, this.state.blog);
+    // this.props.handleBlogSubmit(event, this.state.blog);
 
     this.setState({
       blog: emptyBlog
@@ -41,7 +41,7 @@ class CreateBlog extends Component {
   render() {
     return (
       <div style={{ paddingLeft: '30px', width: '100%' }}>
-        <h2>Create Blog:</h2>
+        <h2>Update Blog:</h2>
         <form onSubmit={this.handleSubmit} className='ui form'>
           <div
             className='equal width fields'
@@ -60,7 +60,7 @@ class CreateBlog extends Component {
                   type='text'
                   name='author'
                   onChange={this.handleChange}
-                  value={this.state.blog.author}
+                  defaultValue={this.props.blog.author}
                 />
               </div>
             </div>
@@ -71,7 +71,7 @@ class CreateBlog extends Component {
                   type='text'
                   name='subject'
                   onChange={this.handleChange}
-                  value={this.state.blog.subject}
+                  defaultValue={this.props.blog.subject}
                 />
               </div>
             </div>
@@ -83,7 +83,7 @@ class CreateBlog extends Component {
                   type='text'
                   name='title'
                   onChange={this.handleChange}
-                  value={this.state.blog.title}
+                  defaultValue={this.props.blog.title}
                 />
               </div>
             </div>
@@ -96,7 +96,7 @@ class CreateBlog extends Component {
                   cols='30'
                   rows='10'
                   onChange={this.handleChange}
-                  value={this.state.blog.article}
+                  defaultValue={this.props.blog.article}
                 ></textarea>
               </div>
             </div>
@@ -111,4 +111,4 @@ class CreateBlog extends Component {
     );
   }
 }
-export default CreateBlog;
+export default UpdateBlog;

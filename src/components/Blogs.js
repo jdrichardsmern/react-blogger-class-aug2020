@@ -10,7 +10,7 @@ const Blogs = (props) => {
       {props.blogs.filter(searchIt(props.searchTerm)).map((blog) => {
         return (
           <BlogItem
-            key={blog.objectId}
+            key={blog._id}
             blog={blog}
             onDelete={props.onDelete}
             onUpdate={props.onUpdate}
